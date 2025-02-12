@@ -6,6 +6,7 @@ from constants import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidFields
+from shot import Shot
 
 class GameCtrl:
     def __init__(self):
@@ -13,6 +14,7 @@ class GameCtrl:
         self.updatable = pygame.sprite.Group()
         self.drawable = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
+        self.shots = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
         self.dt = 0
 
@@ -27,6 +29,8 @@ def main():
     
     Asteroid.containers = (game.asteroids, game.updatable, game.drawable)
     AsteroidFields.containers = (game.updatable)
+
+    Shot.containers = (game.shots, game.updatable, game.drawable)
 
     asteroid_field = AsteroidFields()
 
@@ -43,6 +47,12 @@ def loop(game: GameCtrl, player: Player):
         
         
         game.updatable.update(game.dt)
+
+        # check collisions
+        for asteroid in game.asteroids:
+            if asteroid.collides_with(player):
+                print("Game over!")
+                return
 
         game.screen.fill((0,0,0))
         
