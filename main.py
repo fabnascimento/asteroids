@@ -14,7 +14,7 @@ class GameCtrl:
         self.updatable = pygame.sprite.Group()
         self.drawable = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
-        self.shots = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
         self.dt = 0
 
@@ -30,7 +30,7 @@ def main():
     Asteroid.containers = (game.asteroids, game.updatable, game.drawable)
     AsteroidFields.containers = (game.updatable)
 
-    Shot.containers = (game.shots, game.updatable, game.drawable)
+    Shot.containers = (game.bullets, game.updatable, game.drawable)
 
     asteroid_field = AsteroidFields()
 
@@ -53,6 +53,11 @@ def loop(game: GameCtrl, player: Player):
             if asteroid.collides_with(player):
                 print("Game over!")
                 return
+            
+            for bullet in game.bullets:
+                if asteroid.collides_with(bullet):
+                    asteroid.split()
+                    bullet.kill()
 
         game.screen.fill((0,0,0))
         
